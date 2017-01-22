@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <random>
 
 #define ITS( x ) static_cast< std::ostringstream & >(( std::ostringstream() << std::dec << x ) ).str()
 
@@ -18,36 +19,41 @@ void freeline(int num) {
 	}
 	return;
 }
-
 //Input function
 string input(string info) {
 	cout << info + " ";
 	getline(cin, info);
 	return info;
 }
-
 //Print functions
-int print(string info) {
+void print(string info) {
 	cout << info;
-	return 0;
+	return;
 }
-
-int println(string info) {
+void println(string info) {
 	cout << info << endl;
-	return 0;
+	return;
 }
-
 //Upper function
 string upper(string upperWord) {
 	transform(upperWord.begin(), upperWord.end(), upperWord.begin(), ::toupper);
 	return upperWord;
+}
+//Generate random number
+int random(int start, int end) {
+	mt19937 rng;
+	rng.seed(random_device()());
+	uniform_int_distribution<mt19937::result_type> dist6(start, end);
+	return dist6(rng);
 }
 
 //Main function
 int main() {
 
 	//Declare vars
-	string wordGuess = "HI";
+	string wordArray[] = {"HI","GARY","NO"};
+	int arrayNum = random(1,3);
+	string wordGuess = wordArray[arrayNum];
 
 	//PrintIntro
 	printIntro();
@@ -62,11 +68,8 @@ int main() {
 
 //Introduce the game
 void printIntro() {
-	constexpr int WORLD_LENGTH = 9;
 	println("Welcome to Bulls and Cows, a fun word game.");
-	print("Can you guess the ");
-	cout << WORLD_LENGTH;
-	println(" letter isogram I'm thinking of?");
+	println("Can you guess the isogram I'm thinking of?");
 	return;
 }
 
@@ -78,7 +81,7 @@ string guessLoop(string word) {
 	
 	for (int i = 1; i <= limit; i++) {
 		freeline(1);
-		print("Enter your guess: (");
+		print("\nEnter your guess: (");
 		cout << 6-i;
 		Guess = input(" left)");
 		print("Your guess was: ");
@@ -87,7 +90,9 @@ string guessLoop(string word) {
 			println("Well done! You got the correct word!");
 			break;
 		} else if(i != 5) {
-			println("Try again!");
+			print("Try again! Remember, it is ");
+			cout << word.length();
+			print(" letters long.");
 		} else {
 			println("Sorry, you didn't make it in time!");
 		}
@@ -99,7 +104,7 @@ string guessLoop(string word) {
 
 //Ask the player if they want to play again
 bool promtPlayAgain() {
-	while (true) {
+	do{
 		string response = input("Do you want to play again? (y/n)");
 		if (response[0] == 'y' || response[0] == 'Y') {
 			return true;
@@ -110,14 +115,17 @@ bool promtPlayAgain() {
 		} else {
 			println("Please enter a valid answer.");
 		}
-	}
+	} while (true);
 }
 
 //Playing the game!
-void playGame(string wordGuess) {
+void playGame(string word) {
+	print("The isogram is ");
+	cout << word.length();
+	print(" letters long");
 	while (true) {
 		//GuessLoop
-		guessLoop(wordGuess);
+		guessLoop(word);
 
 		//Prompt to play again
 		if (promtPlayAgain() == true) {
