@@ -1,16 +1,32 @@
 #include "functions.h"
 
+/*
+
+-----Int to string-----
+STRING = to_string(INT)
+
+-----Char to string-----
+STRING.push_back(CHAR)
+
+-----String to int-----
+INT = stoi(STRING)
+
+*/
+
+//Boolean to string
+std::string boolToString(bool value) {
+	std::string s; if (value == true) {s = "true";} else {s = "false";}
+	return s;
+}
+
 //Creates freelines
 void freeline(int num) {
-	for (int i = 0; i < num; i = i + 1) {
-		std::cout << "\n";
-	}
+	for (int i = 0; i < num; i = i + 1) {std::cout << "\n";}
 	return;
 }
 //Input function
 std::string input(std::string info) {
-	std::cout << info + " ";
-	std::getline(std::cin, info);
+	std::cout << info + " "; std::getline(std::cin, info);
 	return info;
 }
 //Print functions
@@ -33,8 +49,6 @@ std::string lower(std::string lowerWord) {
 }
 //Generate random number
 int random(int start, int end) {
-	std::mt19937 rng;
-	rng.seed(std::random_device()());
-	std::uniform_int_distribution<std::mt19937::result_type> dist6(start, end);
+	std::mt19937 rng; rng.seed(std::random_device()()); std::uniform_int_distribution<std::mt19937::result_type> dist6(start, end);
 	return dist6(rng);
 }

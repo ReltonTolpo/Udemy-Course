@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 
+std::string boolToString(bool value);
 void freeline(int num);
 std::string input(std::string info);
 void print(std::string info);

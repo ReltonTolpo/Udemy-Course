@@ -9,6 +9,8 @@ std::string guessLoop(std::string word);
 bool promtPlayAgain();
 void playGame(std::string wordGuess);
 
+FBullCowGame BCGame; //Instantiate a new game
+
 //Main function
 int main() {
 
@@ -38,10 +40,9 @@ void printIntro() {
 //Play the game's guess loop
 std::string guessLoop(std::string word) {
 
-	std::string Guess;
-	int limit = 5;
+	std::string Guess = "";
 	
-	for (int i = 1; i <= limit; i++) {
+	for (int i = 1; i <= BCGame.getMaxTries(); i++) {
 		freeline(1);
 		print("\nEnter your guess: (");
 		print(std::to_string(6-i));
@@ -58,6 +59,7 @@ std::string guessLoop(std::string word) {
 		} else {
 			println("Sorry, you didn't make it in time!");
 		}
+		BCGame.changeCurrentTry(i);
 	}
 	freeline(3);
 	return Guess;
@@ -68,10 +70,11 @@ std::string guessLoop(std::string word) {
 bool promtPlayAgain() {
 	do{
 		std::string response = input("Do you want to play again? (y/n)");
-		if (response[0] == 'y' || response[0] == 'Y') {
+		std::string s; s.push_back(response[0]);
+		if (lower(s) == "y") {
 			return true;
 			break;
-		} else if (response[0] == 'n' || response[0] == 'N') {
+		} else if (lower(s) == "n") {
 			return false;
 			break;
 		} else {
@@ -82,6 +85,7 @@ bool promtPlayAgain() {
 
 //Playing the game!
 void playGame(std::string word) {
+	BCGame.reset;
 	print("The isogram is ");
 	print(std::to_string(word.length()));
 	print(" letters long");
