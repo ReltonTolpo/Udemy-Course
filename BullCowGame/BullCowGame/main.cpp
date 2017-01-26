@@ -1,9 +1,8 @@
+#include "functions.h"
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <random>
-
-#define ITS( x ) static_cast< std::ostringstream & >(( std::ostringstream() << std::dec << x ) ).str()
 
 using namespace std;
 
@@ -11,41 +10,6 @@ void printIntro();
 string guessLoop(string word);
 bool promtPlayAgain();
 void playGame(string wordGuess);
-
-//Creates freelines
-void freeline(int num) {
-	for (int i = 0; i < num; i = i + 1) {
-		cout << "\n";
-	}
-	return;
-}
-//Input function
-string input(string info) {
-	cout << info + " ";
-	getline(cin, info);
-	return info;
-}
-//Print functions
-void print(string info) {
-	cout << info;
-	return;
-}
-void println(string info) {
-	cout << info << endl;
-	return;
-}
-//Upper function
-string upper(string upperWord) {
-	transform(upperWord.begin(), upperWord.end(), upperWord.begin(), ::toupper);
-	return upperWord;
-}
-//Generate random number
-int random(int start, int end) {
-	mt19937 rng;
-	rng.seed(random_device()());
-	uniform_int_distribution<mt19937::result_type> dist6(start, end);
-	return dist6(rng);
-}
 
 //Main function
 int main() {
@@ -91,7 +55,7 @@ string guessLoop(string word) {
 			break;
 		} else if(i != 5) {
 			print("Try again! Remember, it is ");
-			cout << word.length();
+			print(to_string(word.length()));
 			print(" letters long.");
 		} else {
 			println("Sorry, you didn't make it in time!");
