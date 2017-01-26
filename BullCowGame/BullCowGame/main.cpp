@@ -1,23 +1,21 @@
 #include "functions.h"
+#include "FBullCowGame.h"
 #include <iostream>
-#include <string>
 #include <algorithm>
 #include <random>
 
-using namespace std;
-
 void printIntro();
-string guessLoop(string word);
+std::string guessLoop(std::string word);
 bool promtPlayAgain();
-void playGame(string wordGuess);
+void playGame(std::string wordGuess);
 
 //Main function
 int main() {
 
 	//Declare vars
-	string wordArray[] = {"HI","GARY","NO"};
+	std::string wordArray[] = {"HI","GARY","NO"};
 	int arrayNum = random(1,3);
-	string wordGuess = wordArray[arrayNum];
+	std::string wordGuess = wordArray[arrayNum];
 
 	//PrintIntro
 	printIntro();
@@ -38,15 +36,15 @@ void printIntro() {
 }
 
 //Play the game's guess loop
-string guessLoop(string word) {
+std::string guessLoop(std::string word) {
 
-	string Guess;
+	std::string Guess;
 	int limit = 5;
 	
 	for (int i = 1; i <= limit; i++) {
 		freeline(1);
 		print("\nEnter your guess: (");
-		cout << 6-i;
+		print(std::to_string(6-i));
 		Guess = input(" left)");
 		print("Your guess was: ");
 		println(Guess);
@@ -55,7 +53,7 @@ string guessLoop(string word) {
 			break;
 		} else if(i != 5) {
 			print("Try again! Remember, it is ");
-			print(to_string(word.length()));
+			print(std::to_string(word.length()));
 			print(" letters long.");
 		} else {
 			println("Sorry, you didn't make it in time!");
@@ -69,7 +67,7 @@ string guessLoop(string word) {
 //Ask the player if they want to play again
 bool promtPlayAgain() {
 	do{
-		string response = input("Do you want to play again? (y/n)");
+		std::string response = input("Do you want to play again? (y/n)");
 		if (response[0] == 'y' || response[0] == 'Y') {
 			return true;
 			break;
@@ -83,9 +81,9 @@ bool promtPlayAgain() {
 }
 
 //Playing the game!
-void playGame(string word) {
+void playGame(std::string word) {
 	print("The isogram is ");
-	cout << word.length();
+	print(std::to_string(word.length()));
 	print(" letters long");
 	while (true) {
 		//GuessLoop
