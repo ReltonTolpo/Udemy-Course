@@ -60,6 +60,8 @@ FString guessLoop(FString word) {
 		bullCowCount bullCowCount = BCGame.SubmitGuess(Guess);
 		print("Your guess was: ");
 		println(Guess);
+		std::cout << "You have " << bullCowCount.bulls << " bulls" << std::endl;
+		std::cout << "And you have " << bullCowCount.cows << " cows" << std::endl;
 		if (upper(Guess) == word) {
 			println("Well done! You got the correct word!");
 			break;
@@ -107,6 +109,9 @@ void playGame(FString word) {
 		//Prompt to play again
 		if (promtPlayAgain() == true) {
 			println("Have a go!");
+			FString wordArray1[] = { "HI","GARY","NO" };
+			int32 arrayNum1 = random(1, 3);
+			BCGame.setHiddenWord(wordArray1[arrayNum1]);
 		} else {
 			freeline(3);
 			println("We hope you enjoyed your stay!");

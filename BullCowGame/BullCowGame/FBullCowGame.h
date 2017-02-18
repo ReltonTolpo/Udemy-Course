@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iostream>
 
 using FString = std::string;
 using int32 = int;

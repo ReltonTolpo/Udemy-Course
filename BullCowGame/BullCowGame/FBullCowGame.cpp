@@ -24,21 +24,29 @@ bool FBullCowGame::checkGuessValid(FString){
 	return false;
 }
 
-bullCowCount FBullCowGame::SubmitGuess(FString){
+bullCowCount FBullCowGame::SubmitGuess(FString guess){
 	//Don't increase turn number
-	
+	////std::cout << "i am in submitguess" << std::endl;
 	//Setup a return variable
 	bullCowCount bullCowCount;
 
-	int hiddenWordLength = myHiddenWord.length;
+	int32 hiddenWordLength = myHiddenWord.length();
+	////std::cout << "hiddenWordLength" << hiddenWordLength << std::endl;
+	////std::cout << "myHiddenWord" << myHiddenWord << std::endl;
 
-	for (int32 i = 0; i < hiddenWordLength; i++) {
-		for (int32 j = 0; j < hiddenWordLength; j++) {
-			/*if they match then
-				increase bulls
-			else
-				increase cows
-	*/
+	for (int32 HWChar = 0; HWChar < hiddenWordLength; HWChar++) {
+		for (int32 GChar = 0; GChar < hiddenWordLength; GChar++) {
+			if (guess[HWChar] == myHiddenWord[HWChar]) {
+				if (HWChar == GChar) {
+					bullCowCount.bulls++;
+					////std::cout << "bulls = " << bullCowCount.bulls << std::endl;
+
+				} else {
+					bullCowCount.cows++;
+					////std::cout << "cows = " << bullCowCount.cows << std::endl;
+
+				}
+			}
 		}
 	}
 
