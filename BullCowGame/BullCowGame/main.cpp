@@ -1,29 +1,39 @@
+/*
+This is the console exe that makes use of the BullCow class,
+this acts as the view in a MVC pattern and is responsible for all
+user interaction. For game logic see the FBullCowClass.
+*/
+
 #include "functions.h"
 #include "FBullCowGame.h"
 #include <iostream>
+#include <string>
 #include <algorithm>
 #include <random>
 
-void printIntro();
-std::string guessLoop(std::string word);
-bool promtPlayAgain();
-void playGame(std::string wordGuess);
+using FString = std::string;
+using int32 = int;
 
-FBullCowGame BCGame; //Instantiate a new game
+void printIntro();
+FString guessLoop(FString word);
+bool promtPlayAgain();
+void playGame(FString wordGuess);
+
+FBullCowGame BCGame; //Instantiate a new gameb
 
 //Main function
-int main() {
+int32 main() {
 
 	//Declare vars
-	std::string wordArray[] = {"HI","GARY","NO"};
-	int arrayNum = random(1,3);
-	std::string wordGuess = wordArray[arrayNum];
+	FString wordArray[] = {"HI","GARY","NO"};
+	int32 arrayNum = random(1,3);
+	BCGame.setHiddenWord(wordArray[arrayNum]);
 
 	//PrintIntro
 	printIntro();
 
 	//Play game!
-	playGame(wordGuess);
+	playGame(BCGame.getHiddenWord());
 
 	system("PAUSE");
 	return 0;
@@ -38,15 +48,16 @@ void printIntro() {
 }
 
 //Play the game's guess loop
-std::string guessLoop(std::string word) {
+FString guessLoop(FString word) {
 
-	std::string Guess = "";
+	FString Guess = "";
 	
-	for (int i = 1; i <= BCGame.getMaxTries(); i++) {
+	for (int32 i = 1; i <= BCGame.getMaxTries(); i++) {
 		freeline(1);
 		print("\nEnter your guess: (");
 		print(std::to_string(6-i));
 		Guess = input(" left)");
+		bullCowCount bullCowCount = BCGame.SubmitGuess(Guess);
 		print("Your guess was: ");
 		println(Guess);
 		if (upper(Guess) == word) {
@@ -59,7 +70,7 @@ std::string guessLoop(std::string word) {
 		} else {
 			println("Sorry, you didn't make it in time!");
 		}
-		BCGame.changeCurrentTry(i);
+		BCGame.setCurrentTry(i);
 	}
 	freeline(3);
 	return Guess;
@@ -69,8 +80,8 @@ std::string guessLoop(std::string word) {
 //Ask the player if they want to play again
 bool promtPlayAgain() {
 	do{
-		std::string response = input("Do you want to play again? (y/n)");
-		std::string s; s.push_back(response[0]);
+		FString response = input("Do you want to play again? (y/n)");
+		FString s; s.push_back(response[0]);
 		if (lower(s) == "y") {
 			return true;
 			break;
@@ -84,8 +95,8 @@ bool promtPlayAgain() {
 }
 
 //Playing the game!
-void playGame(std::string word) {
-	BCGame.reset;
+void playGame(FString word) {
+	BCGame.reset();
 	print("The isogram is ");
 	print(std::to_string(word.length()));
 	print(" letters long");
