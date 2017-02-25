@@ -1,27 +1,37 @@
 #pragma once
 #include <string>
+#include "functions.h"
 
 using FString = std::string;
 using int32 = int;
 
 // all values intialised to zero
-struct FBullCowCount
-{
+struct FBullCowCount{
 	int32 Bulls = 0;
 	int32 Cows = 0;
 };
 
-class FBullCowGame
-{
+enum class EGuessStatus {
+
+	Invalid_Status,
+	OK,
+	Not_Isogram,
+	Wrong_Length
+
+};
+
+class FBullCowGame{
 public:
 	FBullCowGame(); // constructor
 
+	int32 GetHiddenWordLength() const;
 	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
 	bool IsGameWon() const;
+	bool FBullCowGame::IsIsogram(FString Word) const;
 	
 	void Reset(); // TODO make a more rich return value.
-	bool CheckGuessValidity(FString); // TODO make a more rich return value.
+	EGuessStatus CheckGuessValidity(FString); // TODO make a more rich return value.
 	FBullCowCount SubmitGuess(FString);
 
 

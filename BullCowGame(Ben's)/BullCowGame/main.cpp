@@ -4,7 +4,8 @@ user interaction. For game logic see the FBullCowGame class.
 */
 
 #include <iostream>
-#include <string>	
+#include <string>
+#include "functions.h"
 #include "FBullCowGame.h"
 
 using FText = std::string;
@@ -33,9 +34,8 @@ int main()
 
  
 // introduce the game
-void PrintIntro()
-{
-	constexpr int32 WORD_LENGTH = 9;
+void PrintIntro(){
+	int32 WORD_LENGTH = BCGame.GetHiddenWordLength();
 	std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
 	std::cout << "Can you guess the " << WORD_LENGTH;
 	std::cout << " letter isogram I'm thinking of?\n";
@@ -44,16 +44,14 @@ void PrintIntro()
 }
 
 
-void PlayGame()
-{
+void PlayGame(){
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
 	
 	// loop for the number of turns asking for guesses
-	// TODO change from FOR to WHILE loop once we are validating tries
 	for (int32 count = 1; count <= MaxTries; count++) {
 		FText Guess = GetGuess(); // TODO make loop checking valid
-		
+		EGuessStatus Status = BCGame.CheckGuessValidity(Guess);
 		// submit valid guess to the game, and receive counts
 		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
 		// print number of bulls and cows
@@ -67,19 +65,23 @@ void PlayGame()
 }
 
 
-FText GetGuess()
-{
+FText GetGuess(){
 	int32 CurrentTry = BCGame.GetCurrentTry();
 
 	// get a guess from the player
 	std::cout << "Try " << CurrentTry << ". Enter your guess: ";
 	FText Guess = "";
 	std::getline(std::cin, Guess);
-	return Guess;
+	switch (Status) {
+	case EGuessStatus::Wrong_Length:
+		print("Please enter a "); print(BCGame.GetHiddenWordLength); println(" letter word");
+		break;
+	default:
+		return upper(Guess);
+	}
 }
 
-bool AskToPlayAgain()
-{
+bool AskToPlayAgain(){
 	std::cout << "Do you want to play again (y/n)? ";
 	FText Response = "";
 	std::getline(std::cin, Response);

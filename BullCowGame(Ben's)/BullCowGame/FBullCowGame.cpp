@@ -4,34 +4,41 @@ using int32 = int;
 
 FBullCowGame::FBullCowGame() { Reset(); }
 
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries;}
-int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
+int32 FBullCowGame::GetHiddenWordLength() const {return MyHiddenWord.length();}
+int32 FBullCowGame::GetMaxTries() const {return MyMaxTries;}
+int32 FBullCowGame::GetCurrentTry() const {return MyCurrentTry;}
 
-void FBullCowGame::Reset()
-{
+void FBullCowGame::Reset(){
 	constexpr int32 MAX_TRIES = 8;
 	MyMaxTries = MAX_TRIES;
 
-	const FString HIDDEN_WORD = "Etho";
+	/*FString wordArray[] = { "HI","ETHO","NO" };
+	int32 arrayNum = random(1, 3);
+	MyHiddenWord = wordArray[arrayNum];*/
+	const FString HIDDEN_WORD = "ETHO";
 	MyHiddenWord = HIDDEN_WORD;
+	
 
 	MyCurrentTry = 1;
 	return;
 }
 
-bool FBullCowGame::IsGameWon() const
-{
+bool FBullCowGame::IsGameWon() const{
 	return false;
 }
 
-bool FBullCowGame::CheckGuessValidity(FString)
-{
-	return false;
+EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess){
+	if (!IsIsogram(Guess)) {
+		return EGuessStatus::Not_Isogram;
+	}else if (Guess.length() != GetHiddenWordLength()) {
+		return EGuessStatus::Wrong_Length;
+	} else {
+		return EGuessStatus::OK;
+	}
 }
 
 // receives a VALID guess, incriments turn, and returns count
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
-{
+FBullCowCount FBullCowGame::SubmitGuess(FString Guess){
 	// incriment the turn number
 	MyCurrentTry++;
 
@@ -54,4 +61,10 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
 		}
 	}
 	return BullCowCount;
+}
+
+bool FBullCowGame::IsIsogram(FString Word) const {
+
+	return true;
+
 }
