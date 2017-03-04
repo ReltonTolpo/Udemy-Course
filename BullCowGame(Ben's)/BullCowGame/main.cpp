@@ -13,14 +13,14 @@ using int32 = int;
 
 void PrintIntro();
 void PlayGame();
-FText GetGuess();
+FText GetValidGuess();
 bool AskToPlayAgain();
 
 FBullCowGame BCGame; // instantiate a new game
 
 // the entry point for our application
-int main()
-{
+int main(){
+
 	bool bPlayAgain = false;
 	do {
 		PrintIntro();
@@ -28,62 +28,68 @@ int main()
 		bPlayAgain = AskToPlayAgain();
 	}
 	while (bPlayAgain);
-
 	return 0; // exit the application
+
 }
 
  
 // introduce the game
 void PrintIntro(){
+
 	int32 WORD_LENGTH = BCGame.GetHiddenWordLength();
 	std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
 	std::cout << "Can you guess the " << WORD_LENGTH;
 	std::cout << " letter isogram I'm thinking of?\n";
 	std::cout << std::endl;
 	return;
+
 }
 
 
 void PlayGame(){
+
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
 	
 	// loop for the number of turns asking for guesses
 	for (int32 count = 1; count <= MaxTries; count++) {
-		FText Guess = GetGuess(); // TODO make loop checking valid
-		EGuessStatus Status = BCGame.CheckGuessValidity(Guess);
-		// submit valid guess to the game, and receive counts
+		FText Guess = GetValidGuess();
 		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
 		// print number of bulls and cows
 		std::cout << "Bulls = " << BullCowCount.Bulls;
-		std::cout << ". Cows = " << BullCowCount.Cows << std::endl;
-
-		std::cout << std::endl;
+		std::cout << ". Cows = " << BullCowCount.Cows;
+		freeline(2);
 	}
 
-	// TODO summarise game
 }
 
 
-FText GetGuess(){
-	int32 CurrentTry = BCGame.GetCurrentTry();
+FText GetValidGuess() {
 
-	// get a guess from the player
-	std::cout << "Try " << CurrentTry << ". Enter your guess: ";
-	FText Guess = "";
-	std::getline(std::cin, Guess);
+	int32 CurrentTry = BCGame.GetCurrentTry();
+	print("Try "); print(std::to_string(CurrentTry));
+	FText Guess = input(". Enter your guess: ");
+	EGuessStatus Status = BCGame.CheckGuessValidity(Guess);
 	switch (Status) {
 	case EGuessStatus::Wrong_Length:
-		print("Please enter a "); print(BCGame.GetHiddenWordLength); println(" letter word");
-		break;
+		print("Please enter a "); print(std::to_string(BCGame.GetHiddenWordLength())); println(" letter word");
+		return "aaaa";
+	case EGuessStatus::Not_Isogram:
+		print("Please enter a word without repeating letters");
+		return "aaaa";
 	default:
+		BCGame.IncrementCurrentTry();
 		return upper(Guess);
 	}
+	freeline(1);
+
 }
 
 bool AskToPlayAgain(){
+
 	std::cout << "Do you want to play again (y/n)? ";
 	FText Response = "";
 	std::getline(std::cin, Response);
 	return (Response[0] == 'y') || (Response[0] == 'Y');
+
 }
