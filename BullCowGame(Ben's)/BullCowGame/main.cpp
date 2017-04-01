@@ -32,7 +32,6 @@ int main(){
 
 }
 
- 
 // introduce the game
 void PrintIntro(){
 
@@ -40,29 +39,37 @@ void PrintIntro(){
 	std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
 	std::cout << "Can you guess the " << WORD_LENGTH;
 	std::cout << " letter isogram I'm thinking of?\n";
+	std::cout << "You have " << BCGame.GetMaxTries() << " maximum tries.\n";
 	std::cout << std::endl;
 	return;
 
 }
 
-
 void PlayGame(){
 
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
+	bool FinishGame = false;
 	
 	// loop for the number of turns asking for guesses
-	for (int32 count = 1; count <= MaxTries; count++) {
+	while (FinishGame == false) {
 		FText Guess = GetValidGuess();
 		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
 		// print number of bulls and cows
 		std::cout << "Bulls = " << BullCowCount.Bulls;
 		std::cout << ". Cows = " << BullCowCount.Cows;
 		freeline(2);
+		if (BullCowCount.Bulls == BCGame.GetHiddenWordLength()) {
+			print("Well done! You got the correct word!\n");
+			print("This took you "); printInt(BCGame.GetCurrentTry()-1); print(" tries");
+			freeline(2);
+			FinishGame = true;
+		}else if (BCGame.GetCurrentTry() == MaxTries) {
+			FinishGame = true;
+		}
 	}
 
 }
-
 
 FText GetValidGuess() {
 
@@ -75,7 +82,7 @@ FText GetValidGuess() {
 		print("Please enter a "); print(std::to_string(BCGame.GetHiddenWordLength())); println(" letter word");
 		return "aaaa";
 	case EGuessStatus::Not_Isogram:
-		print("Please enter a word without repeating letters");
+		print("Please enter a word without repeating letters\n");
 		return "aaaa";
 	default:
 		BCGame.IncrementCurrentTry();
@@ -87,9 +94,18 @@ FText GetValidGuess() {
 
 bool AskToPlayAgain(){
 
-	std::cout << "Do you want to play again (y/n)? ";
 	FText Response = "";
-	std::getline(std::cin, Response);
+	while (true) {
+		std::cout << "Do you want to play again (y/n)? ";
+		std::getline(std::cin, Response);
+		freeline(1);
+		if ((Response[0] == 'y') || (Response[0] == 'Y') || (Response[0] == 'n') || (Response[0] == 'N')) {
+			freeline(100);
+			break;
+		} else {
+			print("Please enter a vaild answer\n");
+		}
+	}
 	return (Response[0] == 'y') || (Response[0] == 'Y');
 
 }
